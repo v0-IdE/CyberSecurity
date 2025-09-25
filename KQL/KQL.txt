@@ -280,8 +280,7 @@ SigninLogs
 SecurityIncident
 | where TimeGenerated >= ago(60d)
 | where not(ClassificationComment matches regex "(Closed by MDR|Auto-resolved by MDR)")
-| where Owner contains "@craneww.com"
-| extend User = replace_string(tolower(tostring(Owner.userPrincipalName)),'_a','')
+| extend User = replace_string(tolower(tostring(Owner.userPrincipalName)),'AdminSignifier','')
 | summarize IncidentsClosed=count() by endofday(TimeGenerated), User
 | render columnchart
 
@@ -478,4 +477,5 @@ FinalSummary
 | project-reorder AlertName, Messages, Inbox, Junk, Quarantined, Deleted, Dropped, Unclassified
 | where (Inbox + Unclassified) > (Junk + Quarantined + Deleted + Dropped) and NetworkMessageIds != '[]'
 | sort by Messages desc
+
 
